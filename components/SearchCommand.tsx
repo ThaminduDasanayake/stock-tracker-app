@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
   CommandEmpty,
   CommandInput,
   CommandList,
 } from "@/components/ui/command";
-import { Button } from "@/components/ui/button";
+import { useDebounce } from "@/hooks/useDebounce";
+import { searchStocks } from "@/lib/actions/finnhub.actions";
 import { Loader2, Star, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import { searchStocks } from "@/lib/actions/finnhub.actions";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useEffect, useState } from "react";
 
 const SearchCommand = ({
   renderAs = "button",
