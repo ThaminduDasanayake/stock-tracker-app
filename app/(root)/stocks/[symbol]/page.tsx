@@ -1,6 +1,5 @@
 import TradingViewWidget from "@/components/TradingViewWidget";
 import WatchlistButton from "@/components/WatchlistButton";
-import { Watchlist } from "@/database/models/watchlist.model";
 import {
   BASELINE_WIDGET_CONFIG,
   CANDLE_CHART_WIDGET_CONFIG,
