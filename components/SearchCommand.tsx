@@ -109,7 +109,9 @@ const SearchCommand = ({
             </CommandEmpty>
           ) : displayStocks?.length === 0 ? (
             <div className="search-list-indicator py-8 text-center text-gray-500">
-              {isSearchMode ? "No stocks found for that query" : "No stocks available"}
+              {isSearchMode
+                ? "No stocks found for that query"
+                : "No stocks available"}
             </div>
           ) : (
             <ul className="p-2 space-y-1">

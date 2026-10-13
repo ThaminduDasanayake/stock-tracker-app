@@ -82,10 +82,12 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 
           // If picture found, save it to the user document in MongoDB
           if (userImage) {
-            await db.collection("user").updateOne(
-              { email: session.user.email },
-              { $set: { image: userImage } }
-            );
+            await db
+              .collection("user")
+              .updateOne(
+                { email: session.user.email },
+                { $set: { image: userImage } }
+              );
           }
         }
       }

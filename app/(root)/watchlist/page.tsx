@@ -17,8 +17,8 @@ const WatchlistPage = async () => {
           <Star className="watchlist-star" />
           <h2 className="empty-title">Your watchlist is empty</h2>
           <p className="empty-description">
-            Start tracking stocks by searching for a company and clicking the star
-            or &quot;Add to Watchlist&quot; button.
+            Start tracking stocks by searching for a company and clicking the
+            star or &quot;Add to Watchlist&quot; button.
           </p>
           <Link
             href="/"
@@ -43,9 +43,7 @@ const WatchlistPage = async () => {
     <div className="space-y-10">
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h1 className="watchlist-title">
-            My Watchlist ({watchlist.length})
-          </h1>
+          <h1 className="watchlist-title">My Watchlist ({watchlist.length})</h1>
         </div>
 
         <div className="watchlist-table">
@@ -138,7 +136,9 @@ const WatchlistPage = async () => {
                 </div>
                 <div className="mt-4 pt-3 border-t border-gray-700/60 flex items-center justify-between text-xs text-gray-500">
                   <span>{item.source}</span>
-                  <span className="text-yellow-500 font-medium">Read article →</span>
+                  <span className="text-yellow-500 font-medium">
+                    Read article →
+                  </span>
                 </div>
               </a>
             ))}

@@ -92,7 +92,8 @@ const OnboardingModal = ({ initialOpen }: OnboardingModalProps) => {
           </div>
           <DialogDescription className="text-sm text-gray-400">
             Tell us about your investment strategy so Signalist and our AI can
-            tailor news summaries, market alerts, and insights to your portfolio.
+            tailor news summaries, market alerts, and insights to your
+            portfolio.
           </DialogDescription>
         </DialogHeader>
 

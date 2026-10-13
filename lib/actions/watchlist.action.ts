@@ -27,7 +27,8 @@ export async function addToWatchlist({
 
   try {
     const user = await getAuthenticatedUser();
-    if (!user) return { success: false, error: "Unauthorized. Please sign in." };
+    if (!user)
+      return { success: false, error: "Unauthorized. Please sign in." };
 
     await connectToDatabase();
     const cleanSymbol = symbol.trim().toUpperCase();
@@ -60,7 +61,8 @@ export async function removeFromWatchlist({ symbol }: { symbol: string }) {
 
   try {
     const user = await getAuthenticatedUser();
-    if (!user) return { success: false, error: "Unauthorized. Please sign in." };
+    if (!user)
+      return { success: false, error: "Unauthorized. Please sign in." };
 
     await connectToDatabase();
     const cleanSymbol = symbol.trim().toUpperCase();
@@ -114,7 +116,9 @@ export async function getUserWatchlist() {
       id: String(item._id),
       symbol: String(item.symbol),
       company: String(item.company),
-      addedAt: item.addedAt ? new Date(item.addedAt).toISOString() : new Date().toISOString(),
+      addedAt: item.addedAt
+        ? new Date(item.addedAt).toISOString()
+        : new Date().toISOString(),
     }));
   } catch (error) {
     console.error("Error fetching user watchlist:", error);
