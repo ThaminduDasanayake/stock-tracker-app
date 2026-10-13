@@ -9,14 +9,14 @@ import {
 } from "@/components/ui/command";
 import { useDebounce } from "@/hooks/useDebounce";
 import { searchStocks } from "@/lib/actions/finnhub.actions";
-import { Loader2, TrendingUp } from "lucide-react";
+import { Loader2, TrendingUp, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import WatchlistButton from "./WatchlistButton";
 
 const SearchCommand = ({
   renderAs = "button",
-  label = "Add stock",
+  label = "Search stocks...",
   initialStocks,
 }: SearchCommandProps) => {
   const [open, setOpen] = useState(false);
@@ -68,11 +68,25 @@ const SearchCommand = ({
   return (
     <>
       {renderAs === "text" ? (
-        <span onClick={() => setOpen(true)} className="search-text">
-          {label}
-        </span>
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="group flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-gray-400 hover:text-gray-100 hover:bg-gray-750/70 border border-gray-700/60 hover:border-yellow-500/40 transition-all duration-200 cursor-pointer shadow-xs hover:shadow-yellow-500/5"
+        >
+          <Search className="w-4 h-4 text-gray-400 group-hover:text-yellow-400 transition-colors duration-200 group-hover:scale-110" />
+          <span className="font-medium group-hover:text-yellow-400 transition-colors">
+            {label}
+          </span>
+          <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-semibold text-gray-400 bg-gray-800 border border-gray-700 rounded group-hover:border-yellow-500/30 group-hover:text-yellow-400 transition-colors">
+            <span className="text-xs">⌘</span>K
+          </kbd>
+        </button>
       ) : (
-        <Button onClick={() => setOpen(true)} className="search-search-btn">
+        <Button
+          onClick={() => setOpen(true)}
+          className="search-btn transition-all duration-200 hover:shadow-lg hover:shadow-yellow-500/10 hover:brightness-105 active:scale-95"
+        >
+          <Search className="w-4 h-4 mr-1.5" />
           {label}
         </Button>
       )}
@@ -80,55 +94,70 @@ const SearchCommand = ({
       <CommandDialog
         open={open}
         onOpenChange={setOpen}
-        className="search-dialog"
+        className="search-dialog shadow-2xl backdrop-blur-sm"
       >
-        <div className="search-field">
+        <div className="search-field group">
           <CommandInput
             value={searchTerm}
             onValueChange={setSearchTerm}
-            placeholder="Search stocks..."
+            placeholder="Search symbols or company name (e.g. AAPL, NVDA, TSLA)..."
             className="search-input"
           />
-          {loading && <Loader2 className="search-loader" />}
+          {loading && <Loader2 className="search-loader text-yellow-500" />}
         </div>
 
         <CommandList className="search-list">
           {loading ? (
-            <CommandEmpty className="search-list-empty">
-              Loading stocks ...
+            <CommandEmpty className="search-list-empty py-8 text-gray-400 flex flex-col items-center gap-2">
+              <Loader2 className="w-5 h-5 animate-spin text-yellow-500" />
+              <span>Fetching stocks...</span>
             </CommandEmpty>
           ) : displayStocks?.length === 0 ? (
-            <div className="search-list-indicator">
-              {isSearchMode ? "No results found" : "No stocks available"}
+            <div className="search-list-indicator py-8 text-center text-gray-500">
+              {isSearchMode ? "No stocks found for that query" : "No stocks available"}
             </div>
           ) : (
-            <ul>
-              <div className="search-count">
-                {isSearchMode ? "Search results" : "Popular stocks "}(
-                {displayStocks?.length || 0})
+            <ul className="p-2 space-y-1">
+              <div className="search-count rounded-md mb-2">
+                {isSearchMode ? "Search results" : "Popular stocks"}{" "}
+                <span className="text-yellow-500 font-semibold">
+                  ({displayStocks?.length || 0})
+                </span>
               </div>
-              {displayStocks?.map((stock, i) => (
-                <li key={stock.symbol} className="search-item flex items-center justify-between">
+              {displayStocks?.map((stock) => (
+                <li
+                  key={stock.symbol}
+                  className="group flex items-center justify-between p-2 rounded-lg transition-all duration-200 hover:bg-gray-700/50 hover:border-gray-600 border border-transparent"
+                >
                   <Link
                     href={`/stocks/${stock.symbol}`}
                     onClick={handleSelectStock}
-                    className="search-item-link flex-1"
+                    className="flex-1 flex items-center gap-3 transition-transform duration-200 group-hover:translate-x-1"
                   >
-                    <TrendingUp className="h-4 w-4 text-gray-500 mr-2" />
+                    <div className="p-2 rounded-md bg-gray-700/60 text-gray-400 group-hover:text-yellow-400 group-hover:bg-yellow-500/10 transition-colors">
+                      <TrendingUp className="h-4 w-4" />
+                    </div>
                     <div className="flex-1">
-                      <div className="search-item-name">{stock.name}</div>
-                      <div className="text-sm text-gray-500">
-                        {stock.symbol} | {stock.exchange} | {stock.type}
+                      <div className="font-medium text-base text-gray-300 group-hover:text-yellow-400 transition-colors">
+                        {stock.name}
+                      </div>
+                      <div className="text-xs text-gray-500 font-mono">
+                        <span className="text-gray-300 font-semibold">
+                          {stock.symbol}
+                        </span>{" "}
+                        · {stock.exchange} · {stock.type}
                       </div>
                     </div>
                   </Link>
 
-                  <WatchlistButton
-                    symbol={stock.symbol}
-                    company={stock.name}
-                    isInWatchlist={stock.isInWatchlist}
-                    type="icon"
-                  />
+                  <div className="ml-2">
+                    <WatchlistButton
+                      symbol={stock.symbol}
+                      company={stock.name}
+                      isInWatchlist={stock.isInWatchlist}
+                      type="icon"
+                    />
+                  </div>
                 </li>
               ))}
             </ul>

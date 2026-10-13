@@ -70,7 +70,7 @@ const WatchlistButton = ({
             ? `Remove ${symbol} from watchlist`
             : `Add ${symbol} to watchlist`
         }
-        className={`watchlist-icon-btn ${added ? "watchlist-icon-added" : ""}`}
+        className="group relative p-2 h-9 w-9 rounded-full transition-all duration-200 hover:bg-yellow-500/10 active:scale-90 cursor-pointer hover:ring-2 hover:ring-yellow-500/30"
         onClick={handleClick}
       >
         {isPending ? (
@@ -80,9 +80,13 @@ const WatchlistButton = ({
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill={added ? "#FACC15" : "none"}
-            stroke="#FACC15"
+            stroke={added ? "#FACC15" : "currentColor"}
             strokeWidth="1.5"
-            className="watchlist-star"
+            className={`w-5 h-5 transition-all duration-300 transform group-hover:scale-125 ${
+              added
+                ? "text-yellow-400 group-hover:text-yellow-300 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]"
+                : "text-gray-400 group-hover:text-yellow-400 group-hover:stroke-yellow-400 group-hover:drop-shadow-[0_0_6px_rgba(250,204,21,0.45)]"
+            }`}
           >
             <path
               strokeLinecap="round"
@@ -99,13 +103,15 @@ const WatchlistButton = ({
     <Button
       variant={added ? "destructive" : "default"}
       disabled={isPending}
-      className={`watchlist-btn ${added ? "watchlist-remove" : ""} cursor-pointer`}
+      className={`watchlist-btn ${
+        added ? "watchlist-remove" : ""
+      } cursor-pointer transition-all duration-200 hover:brightness-110 hover:shadow-lg active:scale-98`}
       onClick={handleClick}
     >
       {isPending ? (
         <Loader2 className="w-4 h-4 mr-2 animate-spin text-current" />
       ) : showTrashIcon && added ? (
-        <Trash2 className="w-4 h-4 mr-2" />
+        <Trash2 className="w-4 h-4 mr-2 transition-transform duration-200 hover:rotate-12" />
       ) : null}
       <span>{isPending ? (added ? "Adding..." : "Removing...") : label}</span>
     </Button>
