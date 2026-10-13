@@ -37,7 +37,7 @@ const UserDropdown = ({
           className="flex items-center gap-3 text-gray-400 hover:text-yellow-500"
         >
           <Avatar className="w-8 h-8">
-            <AvatarImage src={user.image || "https://github.com/shadcn.png"} alt={user.name} />
+            <AvatarImage src={user.image} alt={user.name} />
             <AvatarFallback className="bg-yellow-500 text-yellow-900 text-sm font-bold">
               {user.name?.[0] || "U"}
             </AvatarFallback>
@@ -53,7 +53,7 @@ const UserDropdown = ({
         <DropdownMenuLabel>
           <div className="flex relative items-center gap-3 py-2">
             <Avatar className="w-10 h-10">
-              <AvatarImage src={user.image || "https://github.com/shadcn.png"} alt={user.name} />
+              <AvatarImage src={user.image} alt={user.name} />
               <AvatarFallback className="bg-yellow-500 text-yellow-900 text-sm font-bold">
                 {user.name?.[0] || "U"}
               </AvatarFallback>
