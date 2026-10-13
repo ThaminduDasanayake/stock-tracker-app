@@ -16,13 +16,19 @@ import {
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
-import { Control, Controller, FieldError } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldError,
+  FieldValues,
+  Path,
+} from "react-hook-form";
 import countryList from "react-select-country-list";
 
-type CountrySelectProps = {
-  name: string;
+type CountrySelectProps<TFieldValues extends FieldValues = FieldValues> = {
+  name: Path<TFieldValues>;
   label: string;
-  control: any;
+  control: Control<TFieldValues>;
   error?: FieldError;
   required?: boolean;
 };
@@ -113,13 +119,15 @@ const CountrySelect = ({
   );
 };
 
-export const CountrySelectField = ({
+export const CountrySelectField = <
+  TFieldValues extends FieldValues = FieldValues,
+>({
   name,
   label,
   control,
   error,
   required = false,
-}: CountrySelectProps) => {
+}: CountrySelectProps<TFieldValues>) => {
   return (
     <div className="space-y-2">
       <Label htmlFor="country" className="form-label">

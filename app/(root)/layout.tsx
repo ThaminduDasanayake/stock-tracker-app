@@ -23,9 +23,9 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
         // 1. Check user collection in MongoDB
         const dbUser = await db.collection("user").findOne({
           $or: [
-            { _id: session.user.id as any },
             { id: session.user.id },
             { email: session.user.email },
+            { _id: session.user.id as unknown as import("mongodb").ObjectId },
           ],
         });
 

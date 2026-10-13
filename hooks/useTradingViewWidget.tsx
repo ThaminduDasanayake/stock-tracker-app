@@ -22,10 +22,11 @@ const useTradingViewWidget = (
     containerRef.current.appendChild(script);
     containerRef.current.dataset.loaded = "true";
 
+    const container = containerRef.current;
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = "";
-        delete containerRef.current.dataset.loaded;
+      if (container) {
+        container.innerHTML = "";
+        delete container.dataset.loaded;
       }
     };
   }, [scriptUrl, config, height]);

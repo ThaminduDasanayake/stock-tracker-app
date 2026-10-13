@@ -211,7 +211,10 @@ export const checkPriceAlerts = inngest.createFunction(
 
       for (const alert of triggeredAlerts) {
         const user = await db.collection("user").findOne({
-          $or: [{ _id: alert.userId as any }, { id: alert.userId }],
+          $or: [
+            { id: alert.userId },
+            { _id: alert.userId as unknown as import("mongodb").ObjectId },
+          ],
         });
 
         if (user?.email) {

@@ -14,11 +14,14 @@ declare global {
     preferredIndustry: string;
   };
 
-  type CountrySelectProps = {
-    name: string;
+  type CountrySelectProps<
+    TFieldValues extends import("react-hook-form").FieldValues =
+      import("react-hook-form").FieldValues,
+  > = {
+    name: import("react-hook-form").Path<TFieldValues>;
     label: string;
-    control: Control;
-    error?: FieldError;
+    control: import("react-hook-form").Control<TFieldValues>;
+    error?: import("react-hook-form").FieldError;
     required?: boolean;
   };
 
@@ -39,13 +42,16 @@ declare global {
     label: string;
   };
 
-  type SelectFieldProps = {
-    name: string;
+  type SelectFieldProps<
+    TFieldValues extends import("react-hook-form").FieldValues =
+      import("react-hook-form").FieldValues,
+  > = {
+    name: import("react-hook-form").Path<TFieldValues>;
     label: string;
     placeholder: string;
     options: readonly Option[];
-    control: Control;
-    error?: FieldError;
+    control: import("react-hook-form").Control<TFieldValues>;
+    error?: import("react-hook-form").FieldError;
     required?: boolean;
   };
 

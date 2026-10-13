@@ -27,9 +27,9 @@ export const getUserOnboardingStatus = async (): Promise<{
 
     const dbUser = await db.collection("user").findOne({
       $or: [
-        { _id: session.user.id as any },
         { id: session.user.id },
         { email: session.user.email },
+        { _id: session.user.id as unknown as import("mongodb").ObjectId },
       ],
     });
 
@@ -81,9 +81,9 @@ export const saveUserOnboardingPreferences = async (
     await db.collection("user").updateOne(
       {
         $or: [
-          { _id: session.user.id as any },
           { id: session.user.id },
           { email: session.user.email },
+          { _id: session.user.id as unknown as import("mongodb").ObjectId },
         ],
       },
       {
@@ -176,9 +176,9 @@ export const getUserProfile = async (): Promise<UserProfileData | null> => {
 
     const dbUser = await db.collection("user").findOne({
       $or: [
-        { _id: session.user.id as any },
         { id: session.user.id },
         { email: session.user.email },
+        { _id: session.user.id as unknown as import("mongodb").ObjectId },
       ],
     });
 
@@ -222,9 +222,9 @@ export const updateUserProfile = async (preferences: OnboardingPreferences) => {
     await db.collection("user").updateOne(
       {
         $or: [
-          { _id: session.user.id as any },
           { id: session.user.id },
           { email: session.user.email },
+          { _id: session.user.id as unknown as import("mongodb").ObjectId },
         ],
       },
       {
