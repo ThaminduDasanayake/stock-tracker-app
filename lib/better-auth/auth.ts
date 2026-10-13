@@ -16,8 +16,9 @@ export const getAuth = async () => {
     account: {
       accountLinking: {
         enabled: true,
-        trustedProviders: ["google", "github"],
+        trustedProviders: ["google"],
         requireLocalEmailVerified: false,
+        updateUserInfoOnLink: true,
       },
     },
     socialProviders: {
