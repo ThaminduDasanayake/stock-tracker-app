@@ -9,9 +9,10 @@ import {
 } from "@/components/ui/command";
 import { useDebounce } from "@/hooks/useDebounce";
 import { searchStocks } from "@/lib/actions/finnhub.actions";
-import { Loader2, Star, TrendingUp } from "lucide-react";
+import { Loader2, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import WatchlistButton from "./WatchlistButton";
 
 const SearchCommand = ({
   renderAs = "button",
@@ -107,22 +108,27 @@ const SearchCommand = ({
                 {displayStocks?.length || 0})
               </div>
               {displayStocks?.map((stock, i) => (
-                <li key={stock.symbol} className="search-item">
+                <li key={stock.symbol} className="search-item flex items-center justify-between">
                   <Link
                     href={`/stocks/${stock.symbol}`}
                     onClick={handleSelectStock}
-                    className="search-item-link"
+                    className="search-item-link flex-1"
                   >
-                    <TrendingUp className="h-4 2-4 text-gray-500" />
+                    <TrendingUp className="h-4 w-4 text-gray-500 mr-2" />
                     <div className="flex-1">
                       <div className="search-item-name">{stock.name}</div>
                       <div className="text-sm text-gray-500">
                         {stock.symbol} | {stock.exchange} | {stock.type}
                       </div>
                     </div>
-
-                    <Star />
                   </Link>
+
+                  <WatchlistButton
+                    symbol={stock.symbol}
+                    company={stock.name}
+                    isInWatchlist={stock.isInWatchlist}
+                    type="icon"
+                  />
                 </li>
               ))}
             </ul>
