@@ -5,9 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const formatTimeAgo = (timestamp: number) => {
+export const formatTimeAgo = (timestamp: number | string | Date) => {
+  const time =
+    typeof timestamp === "string" || timestamp instanceof Date
+      ? new Date(timestamp).getTime()
+      : timestamp > 1e11
+      ? timestamp
+      : timestamp * 1000;
   const now = Date.now();
-  const diffInMs = now - timestamp * 1000; // Convert to milliseconds
+  const diffInMs = Math.max(0, now - time);
   const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
   const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
 
@@ -16,9 +22,19 @@ export const formatTimeAgo = (timestamp: number) => {
     return `${days} day${days > 1 ? "s" : ""} ago`;
   } else if (diffInHours >= 1) {
     return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
-  } else {
+  } else if (diffInMinutes >= 1) {
     return `${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`;
+  } else {
+    return "just now";
   }
+};
+
+export const formatDate = (date: string | Date | number) => {
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 };
 
 export function delay(ms: number) {
