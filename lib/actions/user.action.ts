@@ -152,3 +152,101 @@ export const getAllUsersForNewsEmail = async () => {
     return [];
   }
 };
+
+export interface UserProfileData {
+  id: string;
+  name: string;
+  email: string;
+  image?: string;
+  country?: string;
+  investmentGoals?: string;
+  riskTolerance?: string;
+  preferredIndustry?: string;
+  createdAt?: string;
+}
+
+export const getUserProfile = async (): Promise<UserProfileData | null> => {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) return null;
+
+    const mongoose = await connectToDatabase();
+    const db = mongoose.connection.db;
+    if (!db) return null;
+
+    const dbUser = await db.collection("user").findOne({
+      $or: [
+        { _id: session.user.id as any },
+        { id: session.user.id },
+        { email: session.user.email },
+      ],
+    });
+
+    if (!dbUser) return null;
+
+    return {
+      id: String(dbUser.id || dbUser._id),
+      name: String(dbUser.name || session.user.name || "User"),
+      email: String(dbUser.email || session.user.email),
+      image: dbUser.image || session.user.image || undefined,
+      country: dbUser.country || "US",
+      investmentGoals: dbUser.investmentGoals || "Growth",
+      riskTolerance: dbUser.riskTolerance || "Medium",
+      preferredIndustry: dbUser.preferredIndustry || "Technology",
+      createdAt: dbUser.createdAt
+        ? new Date(dbUser.createdAt).toISOString()
+        : undefined,
+    };
+  } catch (error) {
+    console.error("Error getting user profile:", error);
+    return null;
+  }
+};
+
+export const updateUserProfile = async (preferences: OnboardingPreferences) => {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) {
+      return { success: false, error: "Unauthorized. Please sign in." };
+    }
+
+    const mongoose = await connectToDatabase();
+    const db = mongoose.connection.db;
+    if (!db) {
+      return { success: false, error: "Database connection failed." };
+    }
+
+    const { country, investmentGoals, riskTolerance, preferredIndustry } =
+      preferences;
+
+    await db.collection("user").updateOne(
+      {
+        $or: [
+          { _id: session.user.id as any },
+          { id: session.user.id },
+          { email: session.user.email },
+        ],
+      },
+      {
+        $set: {
+          country,
+          investmentGoals,
+          riskTolerance,
+          preferredIndustry,
+          updatedAt: new Date(),
+        },
+      }
+    );
+
+    revalidatePath("/profile");
+    revalidatePath("/");
+    return {
+      success: true,
+      message: "Preferences updated successfully!",
+    };
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    return { success: false, error: "Failed to update profile." };
+  }
+};
+

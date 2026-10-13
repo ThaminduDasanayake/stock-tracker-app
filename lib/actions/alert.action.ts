@@ -55,6 +55,7 @@ export async function createPriceAlert({
 
     revalidatePath(`/stocks/${cleanSymbol}`);
     revalidatePath("/watchlist");
+    revalidatePath("/profile");
     revalidatePath("/");
 
     return {
@@ -112,6 +113,7 @@ export async function deletePriceAlert(alertId: string) {
     await AlertModel.deleteOne({ _id: alertId, userId: user.id });
 
     revalidatePath("/watchlist");
+    revalidatePath("/profile");
     revalidatePath("/");
 
     return { success: true, message: "Alert removed successfully" };
@@ -135,6 +137,7 @@ export async function toggleAlertStatus(alertId: string, isActive: boolean) {
     );
 
     revalidatePath("/watchlist");
+    revalidatePath("/profile");
     revalidatePath("/");
 
     return {
