@@ -55,11 +55,13 @@ export default function AlertsManager({ initialAlerts }: AlertsManagerProps) {
         } else {
           // Revert
           setAlerts((prev) =>
-            prev.map((a) => (a.id === id ? { ...a, isActive: currentStatus } : a))
+            prev.map((a) =>
+              a.id === id ? { ...a, isActive: currentStatus } : a
+            )
           );
           toast.error(res.error || "Failed to update alert");
         }
-      } catch (err) {
+      } catch {
         setAlerts((prev) =>
           prev.map((a) => (a.id === id ? { ...a, isActive: currentStatus } : a))
         );
@@ -81,7 +83,7 @@ export default function AlertsManager({ initialAlerts }: AlertsManagerProps) {
           setAlerts(prevAlerts);
           toast.error(res.error || "Failed to delete alert");
         }
-      } catch (err) {
+      } catch {
         setAlerts(prevAlerts);
         toast.error("Failed to delete alert");
       }
@@ -94,10 +96,12 @@ export default function AlertsManager({ initialAlerts }: AlertsManagerProps) {
         <div className="w-12 h-12 rounded-full bg-yellow-500/10 text-yellow-500 flex items-center justify-center mx-auto">
           <Bell className="w-6 h-6" />
         </div>
-        <h3 className="text-lg font-semibold text-white">No Price Alerts Set</h3>
+        <h3 className="text-lg font-semibold text-white">
+          No Price Alerts Set
+        </h3>
         <p className="text-sm text-gray-400 max-w-md mx-auto">
-          You haven&apos;t set any price thresholds yet. Head over to any stock page
-          or your watchlist to set upper or lower price alerts.
+          You haven&apos;t set any price thresholds yet. Head over to any stock
+          page or your watchlist to set upper or lower price alerts.
         </p>
         <Link
           href="/watchlist"

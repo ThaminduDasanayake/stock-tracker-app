@@ -30,12 +30,16 @@ export async function createPriceAlert({
   threshold: number;
 }) {
   if (!symbol || !threshold || isNaN(threshold)) {
-    return { success: false, error: "Valid symbol and target price are required" };
+    return {
+      success: false,
+      error: "Valid symbol and target price are required",
+    };
   }
 
   try {
     const user = await getAuthenticatedUser();
-    if (!user) return { success: false, error: "Unauthorized. Please sign in." };
+    if (!user)
+      return { success: false, error: "Unauthorized. Please sign in." };
 
     await connectToDatabase();
     const cleanSymbol = symbol.trim().toUpperCase();
@@ -150,7 +154,9 @@ export async function toggleAlertStatus(alertId: string, isActive: boolean) {
   }
 }
 
-export async function getCurrentStockQuote(symbol: string): Promise<number | null> {
+export async function getCurrentStockQuote(
+  symbol: string
+): Promise<number | null> {
   try {
     const token =
       process.env.FINNHUB_API_KEY || process.env.NEXT_PUBLIC_FINNHUB_API_KEY;

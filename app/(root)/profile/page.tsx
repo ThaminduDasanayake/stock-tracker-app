@@ -4,7 +4,7 @@ import { getUserAlerts } from "@/lib/actions/alert.action";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ProfilePreferencesForm from "@/components/ProfilePreferencesForm";
 import AlertsManager from "@/components/AlertsManager";
-import { Sliders, Bell, User, Calendar, ShieldCheck } from "lucide-react";
+import { Sliders, Bell, Calendar, ShieldCheck } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -76,7 +76,8 @@ export default async function ProfilePage() {
                 Investment Preferences
               </h2>
               <p className="text-xs sm:text-sm text-gray-400">
-                Configure your strategy to customize Gemini AI market digests and recommendations.
+                Configure your strategy to customize Gemini AI market digests
+                and recommendations.
               </p>
             </div>
           </div>
@@ -96,7 +97,8 @@ export default async function ProfilePage() {
                   Stock Price Alerts ({alerts.length})
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-400">
-                  Manage upper and lower price threshold alerts. Automated notifications are sent via email.
+                  Manage upper and lower price threshold alerts. Automated
+                  notifications are sent via email.
                 </p>
               </div>
             </div>

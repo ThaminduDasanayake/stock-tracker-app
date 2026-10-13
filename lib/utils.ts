@@ -10,8 +10,8 @@ export const formatTimeAgo = (timestamp: number | string | Date) => {
     typeof timestamp === "string" || timestamp instanceof Date
       ? new Date(timestamp).getTime()
       : timestamp > 1e11
-      ? timestamp
-      : timestamp * 1000;
+        ? timestamp
+        : timestamp * 1000;
   const now = Date.now();
   const diffInMs = Math.max(0, now - time);
   const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));

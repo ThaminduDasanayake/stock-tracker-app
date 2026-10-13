@@ -40,10 +40,14 @@ export const AlertModal = ({
   triggerButton,
 }: AlertModalProps) => {
   const [open, setOpen] = useState(false);
-  const [alertName, setAlertName] = useState(`${symbol.toUpperCase()} Target Alert`);
+  const [alertName, setAlertName] = useState(
+    `${symbol.toUpperCase()} Target Alert`
+  );
   const [alertType, setAlertType] = useState<"upper" | "lower">("upper");
   const [threshold, setThreshold] = useState("");
-  const [currentPrice, setCurrentPrice] = useState<number | null>(initialPrice ?? null);
+  const [currentPrice, setCurrentPrice] = useState<number | null>(
+    initialPrice ?? null
+  );
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -111,7 +115,8 @@ export const AlertModal = ({
             </DialogTitle>
           </div>
           <DialogDescription className="text-sm text-gray-400">
-            Receive an email notification when {company || symbol} hits your target price.
+            Receive an email notification when {company || symbol} hits your
+            target price.
           </DialogDescription>
         </DialogHeader>
 
@@ -151,13 +156,19 @@ export const AlertModal = ({
                 <SelectValue placeholder="Select condition" />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 border-gray-700 text-white">
-                <SelectItem value="upper" className="focus:bg-gray-700 cursor-pointer">
+                <SelectItem
+                  value="upper"
+                  className="focus:bg-gray-700 cursor-pointer"
+                >
                   <div className="flex items-center gap-2">
                     <TrendingUp className="w-4 h-4 text-green-400" />
                     <span>Price rises above or equal to (&gt;=)</span>
                   </div>
                 </SelectItem>
-                <SelectItem value="lower" className="focus:bg-gray-700 cursor-pointer">
+                <SelectItem
+                  value="lower"
+                  className="focus:bg-gray-700 cursor-pointer"
+                >
                   <div className="flex items-center gap-2">
                     <TrendingDown className="w-4 h-4 text-red-400" />
                     <span>Price drops below or equal to (&lt;=)</span>

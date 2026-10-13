@@ -249,4 +249,3 @@ export const updateUserProfile = async (preferences: OnboardingPreferences) => {
     return { success: false, error: "Failed to update profile." };
   }
 };
-
