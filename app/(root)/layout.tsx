@@ -1,6 +1,8 @@
 import Header from "@/components/Header";
 import { auth } from "@/lib/better-auth/auth";
 import { connectToDatabase } from "@/database/mongoose";
+import { getUserOnboardingStatus } from "@/lib/actions/user.action";
+import OnboardingModal from "@/components/OnboardingModal";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -80,10 +82,12 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 
           // If picture found, save it to the user document in MongoDB
           if (userImage) {
-            await db.collection("user").updateOne(
-              { email: session.user.email },
-              { $set: { image: userImage } }
-            );
+            await db
+              .collection("user")
+              .updateOne(
+                { email: session.user.email },
+                { $set: { image: userImage } }
+              );
           }
         }
       }
@@ -91,6 +95,9 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
       console.error("Error retrieving user avatar image:", e);
     }
   }
+
+  // Check onboarding status
+  const { isOnboarded } = await getUserOnboardingStatus();
 
   const user: User = {
     id: session.user.id,
@@ -103,6 +110,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
     <main className="min-h-screen text-gray-400">
       <Header user={user} />
       <div className="container py-10">{children}</div>
+      <OnboardingModal initialOpen={!isOnboarded} />
     </main>
   );
 };

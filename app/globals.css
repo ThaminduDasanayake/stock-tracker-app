@@ -209,16 +209,16 @@
     @apply text-gray-400 font-medium hover:text-yellow-400 hover:underline transition-colors;
   }
   .search-text {
-    @apply cursor-pointer hover:text-yellow-500;
+    @apply cursor-pointer hover:text-yellow-400 transition-colors duration-200;
   }
   .search-btn {
-    @apply cursor-pointer px-4 py-2 w-fit flex items-center gap-2 text-sm md:text-base bg-yellow-500 hover:bg-yellow-500 text-black font-medium rounded;
+    @apply cursor-pointer px-4 py-2 w-fit flex items-center gap-2 text-sm md:text-base bg-yellow-500 hover:bg-yellow-400 text-black font-medium rounded transition-all duration-200 hover:shadow-md hover:shadow-yellow-500/20 active:scale-95;
   }
   .search-dialog {
-    @apply !bg-gray-800 lg:min-w-[800px] border-gray-600 fixed top-10 left-1/2 -translate-x-1/2 translate-y-10;
+    @apply !bg-gray-800 lg:min-w-[800px] border-gray-600 fixed top-10 left-1/2 -translate-x-1/2 translate-y-10 shadow-2xl rounded-xl overflow-hidden;
   }
   .search-field {
-    @apply !bg-gray-800 border-b border-gray-600 relative;
+    @apply !bg-gray-800 border-b border-gray-600 relative transition-colors focus-within:border-yellow-500/60;
   }
   .search-list {
     @apply !bg-gray-800 max-h-[400px];
@@ -230,22 +230,22 @@
     @apply py-6 !bg-transparent text-center text-gray-500;
   }
   .search-input {
-    @apply !bg-gray-800 border-0 text-gray-400 placeholder:text-gray-500 focus:ring-0 text-base h-14 pr-10;
+    @apply !bg-gray-800 border-0 text-gray-200 placeholder:text-gray-500 focus:ring-0 text-base h-14 pr-10 transition-colors;
   }
   .search-loader {
     @apply absolute right-12 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 animate-spin;
   }
   .search-count {
-    @apply py-2 px-4 text-sm font-medium text-gray-400 bg-gray-700 border-b border-gray-700;
+    @apply py-2 px-4 text-sm font-medium text-gray-400 bg-gray-700/80 border-b border-gray-700;
   }
   .search-item {
-    @apply rounded-none my-3 px-1 w-full data-[selected=true]:bg-gray-600;
+    @apply rounded-lg my-1 px-1 w-full transition-all duration-200 hover:bg-gray-700/40;
   }
   .search-item-link {
-    @apply px-2 w-full cursor-pointer border-b border-gray-600 last:border-b-0 transition-colors flex items-center gap-3;
+    @apply px-2 w-full cursor-pointer transition-colors flex items-center gap-3;
   }
   .search-item-name {
-    @apply font-medium text-base text-gray-400;
+    @apply font-medium text-base text-gray-300 transition-colors;
   }
   .nav-list {
     @apply flex flex-col sm:flex-row p-2 gap-3 sm:gap-10 font-medium;

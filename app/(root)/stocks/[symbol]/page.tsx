@@ -9,9 +9,13 @@ import {
   TECHNICAL_ANALYSIS_WIDGET_CONFIG,
 } from "@/lib/constants";
 
+import { isStockInWatchlist } from "@/lib/actions/watchlist.action";
+
 const StockDetails = async ({ params }: StockDetailsPageProps) => {
   const { symbol } = await params;
+  const upperSymbol = symbol.toUpperCase();
   const scriptUrl = `https://s3.tradingview.com/external-embedding/embed-widget-`;
+  const inWatchlist = await isStockInWatchlist(upperSymbol);
 
   return (
     <div className="flex min-h-screen p-4 md:p-6 lg:p-8">
@@ -42,9 +46,9 @@ const StockDetails = async ({ params }: StockDetailsPageProps) => {
         <div className="flex flex-col gap-6">
           <div className="flex items-center justify-between">
             <WatchlistButton
-              symbol={symbol.toUpperCase()}
-              company={symbol.toUpperCase()}
-              isInWatchlist={false}
+              symbol={upperSymbol}
+              company={upperSymbol}
+              isInWatchlist={inWatchlist}
             />
           </div>
 

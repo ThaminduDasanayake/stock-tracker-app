@@ -54,7 +54,8 @@ const SignIn = () => {
       <div>
         <h1 className="form-title mb-2">Welcome to Signalist</h1>
         <p className="text-gray-400 text-sm">
-          Sign in to access your stock watchlist, market alerts, and personalized insights.
+          Sign in to access your stock watchlist, market alerts, and
+          personalized insights.
         </p>
       </div>
 

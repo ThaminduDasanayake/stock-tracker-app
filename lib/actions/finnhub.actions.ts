@@ -173,6 +173,26 @@ export const searchStocks = cache(
         results = Array.isArray(data?.result) ? data.result : [];
       }
 
+      let watchlistSymbols = new Set<string>();
+      try {
+        const { auth } = await import("@/lib/better-auth/auth");
+        const { headers } = await import("next/headers");
+        const { connectToDatabase } = await import("@/database/mongoose");
+        const { Watchlist } = await import("@/database/models/watchlist.model");
+
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (session?.user) {
+          await connectToDatabase();
+          const items = await Watchlist.find(
+            { userId: session.user.id },
+            { symbol: 1 }
+          ).lean();
+          watchlistSymbols = new Set(items.map((i) => String(i.symbol)));
+        }
+      } catch {
+        // Fallback gracefully if context has no headers or database error
+      }
+
       const mapped: StockWithWatchlistStatus[] = results
         .map((r) => {
           const upper = (r.symbol || "").toUpperCase();
@@ -180,8 +200,7 @@ export const searchStocks = cache(
           const exchangeFromDisplay =
             (r.displaySymbol as string | undefined) || undefined;
           const exchangeFromProfile = (r as any).__exchange as
-            | string
-            | undefined;
+            string | undefined;
           const exchange = exchangeFromDisplay || exchangeFromProfile || "US";
           const type = r.type || "Stock";
           const item: StockWithWatchlistStatus = {
@@ -189,7 +208,7 @@ export const searchStocks = cache(
             name,
             exchange,
             type,
-            isInWatchlist: false,
+            isInWatchlist: watchlistSymbols.has(upper),
           };
           return item;
         })
