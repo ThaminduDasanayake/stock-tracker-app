@@ -1,0 +1,9 @@
+node_modules
+.next
+out
+build
+coverage
+*.min.js
+*.min.css
+pnpm-lock.yaml
+.DS_Store
