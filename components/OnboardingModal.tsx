@@ -101,7 +101,7 @@ const OnboardingModal = ({ initialOpen }: OnboardingModalProps) => {
           <CountrySelectField
             name="country"
             label="Country"
-            control={control as any}
+            control={control}
             error={errors.country}
             required
           />
@@ -111,7 +111,7 @@ const OnboardingModal = ({ initialOpen }: OnboardingModalProps) => {
             label="Investment Goals"
             placeholder="Select your goal"
             options={INVESTMENT_GOALS}
-            control={control as any}
+            control={control}
             error={errors.investmentGoals}
             required
           />
@@ -121,7 +121,7 @@ const OnboardingModal = ({ initialOpen }: OnboardingModalProps) => {
             label="Risk Tolerance"
             placeholder="Select your risk profile"
             options={RISK_TOLERANCE_OPTIONS}
-            control={control as any}
+            control={control}
             error={errors.riskTolerance}
             required
           />
@@ -131,7 +131,7 @@ const OnboardingModal = ({ initialOpen }: OnboardingModalProps) => {
             label="Preferred Industry"
             placeholder="Select preferred sector"
             options={PREFERRED_INDUSTRIES}
-            control={control as any}
+            control={control}
             error={errors.preferredIndustry}
             required
           />

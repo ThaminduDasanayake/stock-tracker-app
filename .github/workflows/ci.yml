@@ -46,14 +46,18 @@ jobs:
         run: pnpm lint
 
       - name: Run TypeScript type check
-        run: pnpm exec tsc --noEmit
+        run: pnpm type-check
 
   build:
     name: Production Build
     needs: lint-and-typecheck
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
     env:
-      NODE_ENV: production
       NEXT_PUBLIC_BASE_URL: http://localhost:3000
       BETTER_AUTH_SECRET: ci_test_secret_minimum_32_chars_ci_build
       BETTER_AUTH_URL: http://localhost:3000
@@ -81,7 +85,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --prod=false
 
       - name: Cache Next.js build cache
         uses: actions/cache@v4

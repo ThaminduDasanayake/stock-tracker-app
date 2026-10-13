@@ -10,6 +10,7 @@ import {
 } from "@/lib/constants";
 
 import { isStockInWatchlist } from "@/lib/actions/watchlist.action";
+import AlertModal from "@/components/AlertModal";
 
 const StockDetails = async ({ params }: StockDetailsPageProps) => {
   const { symbol } = await params;
@@ -44,12 +45,13 @@ const StockDetails = async ({ params }: StockDetailsPageProps) => {
 
         {/* Right column */}
         <div className="flex flex-col gap-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <WatchlistButton
               symbol={upperSymbol}
               company={upperSymbol}
               isInWatchlist={inWatchlist}
             />
+            <AlertModal symbol={upperSymbol} company={upperSymbol} />
           </div>
 
           <TradingViewWidget

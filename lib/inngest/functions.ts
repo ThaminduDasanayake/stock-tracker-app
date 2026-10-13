@@ -3,11 +3,18 @@ import {
   NEWS_SUMMARY_EMAIL_PROMPT,
   PERSONALIZED_WELCOME_EMAIL_PROMPT,
 } from "@/lib/inngest/prompts";
-import { sendNewsSummaryEmail, sendWelcomeEmail } from "@/lib/nodemailer";
+import {
+  sendNewsSummaryEmail,
+  sendWelcomeEmail,
+  sendStockPriceAlertEmail,
+} from "@/lib/nodemailer";
 import { getNews } from "@/lib/actions/finnhub.actions";
 import { getFormattedTodayDate } from "@/lib/utils";
 import { getAllUsersForNewsEmail } from "../actions/user.action";
 import { getWatchlistSymbolsByEmail } from "../actions/watchlist.action";
+import { connectToDatabase } from "@/database/mongoose";
+import { AlertModel } from "@/database/models/alert.model";
+import { getCurrentStockQuote } from "@/lib/actions/alert.action";
 
 export const sendSignUpEmail = inngest.createFunction(
   { id: "sign-up-email" },
@@ -118,7 +125,7 @@ export const sendDailyNewsSummary = inngest.createFunction(
           (part && "text" in part ? part.text : null) || "No market news.";
 
         userNewsSummaries.push({ user, newsContent });
-      } catch (e) {
+      } catch {
         console.error("Failed to summarize news for : ", user.email);
         userNewsSummaries.push({ user, newsContent: null });
       }
@@ -142,6 +149,100 @@ export const sendDailyNewsSummary = inngest.createFunction(
     return {
       success: true,
       message: "Daily news summary emails sent successfully",
+    };
+  }
+);
+
+export const checkPriceAlerts = inngest.createFunction(
+  { id: "check-price-alerts" },
+  [{ event: "app/check.price.alerts" }, { cron: "*/15 * * * *" }],
+  async ({ step }) => {
+    // Step 1: Fetch all active alerts from database
+    const alerts = await step.run("get-active-alerts", async () => {
+      await connectToDatabase();
+      const list = await AlertModel.find({ isActive: true }).lean();
+      return list.map((a) => ({
+        id: String(a._id),
+        userId: String(a.userId),
+        symbol: String(a.symbol),
+        company: String(a.company),
+        alertType: a.alertType as "upper" | "lower",
+        threshold: Number(a.threshold),
+      }));
+    });
+
+    if (!alerts || alerts.length === 0) {
+      return { success: true, message: "No active price alerts" };
+    }
+
+    // Step 2: Fetch current prices for all distinct symbols
+    const distinctSymbols = [...new Set(alerts.map((a) => a.symbol))];
+    const prices = await step.run("fetch-stock-prices", async () => {
+      const map: Record<string, number> = {};
+      await Promise.all(
+        distinctSymbols.map(async (sym) => {
+          const price = await getCurrentStockQuote(sym);
+          if (price !== null) {
+            map[sym] = price;
+          }
+        })
+      );
+      return map;
+    });
+
+    // Step 3: Check which alerts are triggered
+    const triggeredAlerts = alerts.filter((alert) => {
+      const price = prices[alert.symbol];
+      if (price === undefined) return false;
+      if (alert.alertType === "upper" && price >= alert.threshold) return true;
+      if (alert.alertType === "lower" && price <= alert.threshold) return true;
+      return false;
+    });
+
+    if (triggeredAlerts.length === 0) {
+      return { success: true, message: "No alerts triggered" };
+    }
+
+    // Step 4: Send emails and update alerts
+    await step.run("send-alert-notifications", async () => {
+      const mongoose = await connectToDatabase();
+      const db = mongoose.connection.db;
+      if (!db) return;
+
+      for (const alert of triggeredAlerts) {
+        const user = await db.collection("user").findOne({
+          $or: [
+            { id: alert.userId },
+            { _id: alert.userId as unknown as import("mongodb").ObjectId },
+          ],
+        });
+
+        if (user?.email) {
+          try {
+            await sendStockPriceAlertEmail({
+              email: user.email,
+              symbol: alert.symbol,
+              company: alert.company,
+              alertType: alert.alertType,
+              currentPrice: prices[alert.symbol],
+              targetPrice: alert.threshold,
+            });
+
+            // Mark alert as triggered & deactivate so user isn't spammed
+            await AlertModel.updateOne(
+              { _id: alert.id },
+              { $set: { isActive: false, lastTriggeredAt: new Date() } }
+            );
+          } catch (err) {
+            console.error(`Failed sending alert for ${alert.symbol}:`, err);
+          }
+        }
+      }
+    });
+
+    return {
+      success: true,
+      message: `Triggered ${triggeredAlerts.length} price alerts`,
     };
   }
 );

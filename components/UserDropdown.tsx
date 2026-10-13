@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut } from "lucide-react";
+import { LogOut, User as UserIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import NavItems from "./NavItems";
 import { Button } from "./ui/button";
@@ -75,6 +76,15 @@ const UserDropdown = ({
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-gray-600" />
+        <DropdownMenuItem asChild>
+          <Link
+            href="/profile"
+            className="flex items-center text-gray-100 text-md font-medium focus:bg-transparent focus:text-yellow-500 transition-colors cursor-pointer"
+          >
+            <UserIcon className="h-4 w-4 mr-2 hidden sm:block" />
+            Profile & Settings
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={handleSignOut}
           className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-yellow-500 transition-colors cursor-pointer"

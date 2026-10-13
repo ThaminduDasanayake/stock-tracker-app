@@ -1,8 +1,9 @@
 import { getUserWatchlist } from "@/lib/actions/watchlist.action";
 import { getNews } from "@/lib/actions/finnhub.actions";
 import WatchlistButton from "@/components/WatchlistButton";
+import AlertModal from "@/components/AlertModal";
 import Link from "next/link";
-import { Star, TrendingUp, ExternalLink } from "lucide-react";
+import { Star, TrendingUp, ExternalLink, Bell } from "lucide-react";
 import { formatTimeAgo } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -85,6 +86,19 @@ const WatchlistPage = async () => {
                   </td>
                   <td className="py-4 px-4 text-right">
                     <div className="flex items-center justify-end gap-2">
+                      <AlertModal
+                        symbol={stock.symbol}
+                        company={stock.company}
+                        triggerButton={
+                          <button
+                            type="button"
+                            title="Set Price Alert"
+                            className="p-1.5 text-gray-400 hover:text-yellow-400 rounded hover:bg-gray-700/60 transition-colors cursor-pointer"
+                          >
+                            <Bell className="w-3.5 h-3.5" />
+                          </button>
+                        }
+                      />
                       <Link
                         href={`/stocks/${stock.symbol}`}
                         className="text-xs text-gray-400 hover:text-white flex items-center gap-1 px-2.5 py-1 rounded bg-gray-700/60 hover:bg-gray-700 transition-colors"
