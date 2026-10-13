@@ -1,6 +1,8 @@
 import Header from "@/components/Header";
 import { auth } from "@/lib/better-auth/auth";
 import { connectToDatabase } from "@/database/mongoose";
+import { getUserOnboardingStatus } from "@/lib/actions/user.action";
+import OnboardingModal from "@/components/OnboardingModal";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -92,6 +94,9 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  // Check onboarding status
+  const { isOnboarded } = await getUserOnboardingStatus();
+
   const user: User = {
     id: session.user.id,
     name: session.user.name,
@@ -103,6 +108,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
     <main className="min-h-screen text-gray-400">
       <Header user={user} />
       <div className="container py-10">{children}</div>
+      <OnboardingModal initialOpen={!isOnboarded} />
     </main>
   );
 };
