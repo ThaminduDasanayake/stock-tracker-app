@@ -18,7 +18,7 @@ const WatchlistPage = async () => {
           <h2 className="empty-title">Your watchlist is empty</h2>
           <p className="empty-description">
             Start tracking stocks by searching for a company and clicking the star
-            or "Add to Watchlist" button.
+            or &quot;Add to Watchlist&quot; button.
           </p>
           <Link
             href="/"
