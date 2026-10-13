@@ -71,15 +71,10 @@ const SearchCommand = ({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="group flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-gray-400 hover:text-gray-100 hover:bg-gray-750/70 border border-gray-700/60 hover:border-yellow-500/40 transition-all duration-200 cursor-pointer shadow-xs hover:shadow-yellow-500/5"
+          className="group flex items-center gap-1.5 font-medium text-gray-400 hover:text-yellow-500 transition-colors cursor-pointer bg-transparent border-0 p-0 text-base"
         >
-          <Search className="w-4 h-4 text-gray-400 group-hover:text-yellow-400 transition-colors duration-200 group-hover:scale-110" />
-          <span className="font-medium group-hover:text-yellow-400 transition-colors">
-            {label}
-          </span>
-          <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-semibold text-gray-400 bg-gray-800 border border-gray-700 rounded group-hover:border-yellow-500/30 group-hover:text-yellow-400 transition-colors">
-            <span className="text-xs">⌘</span>K
-          </kbd>
+          <Search className="w-4 h-4 text-gray-400 group-hover:text-yellow-500 transition-all duration-200 group-hover:scale-110" />
+          <span>{label}</span>
         </button>
       ) : (
         <Button
